@@ -1,0 +1,43 @@
+{
+  "L'Équipe.fr": {
+    "domain": "lequipe.fr",
+    "allow_cookies": 1,
+    "block_regex": "(\\.poool\\.fr\\/|\\.lequipe\\.fr\\/assets\\/js\\/.*[wW]all.+\\.js)",
+    "cs_dompurify": 1,
+    "cs_param": {"paywall_sel": "article.Article--limited div.Article__paywall"},
+    "upd_version": "4.3.6.1"
+  },
+  "Lance.com.br": {
+    "domain": "lance.com.br",
+    "allow_cookies": 1,
+    "cs_code": "[{\"cond\":\"div.paywall-content\", \"rm_class\":\"h-[550px]\"}, {\"hide_elem\":\"div[class*='backdrop-blur-'],div[style*='repeating-linear-gradient']\"}]",
+    "upd_version": "4.3.6.3"
+  },
+  "Ringier Gruppe": {
+    "domain": "###_ch_ringier",
+    "group": [
+      "beobachter.ch",
+      "blick.ch",
+      "handelszeitung.ch"
+    ],
+    "allow_cookies": 1,
+    "block_regex": "\\.tinypass\\.com",
+    "cs_dompurify": 1,
+    "exception": [{
+        "domain": "blick.ch",
+        "allow_cookies": 1,
+        "block_regex": "\\.tinypass\\.com"
+      }
+    ],
+    "upd_version": "4.3.6.3"
+  },
+  "Vorarlberg Online": {
+    "domain": "vol.at",
+    "allow_cookies": 1,
+    "block_regex": "\\.piano\\.io",
+    "cs_dompurify": 1,
+    "cs_param": {"art_pars_sel": "article div.content-block--wrapper:not(:empty)"},
+    "upd_version_min": "4.3.5.3",
+    "upd_version": "4.3.6.2"
+  }
+}
