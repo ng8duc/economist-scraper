@@ -39,6 +39,7 @@ export async function summariseText(text, options = {}) {
 Bạn là một biên tập viên chuyên nghiệp. Hãy cung cấp một bản tóm tắt chất lượng cao, ngắn gọn cho văn bản dưới đây.
 Bản tóm tắt phải được viết bằng ${language}.
 Định dạng bản tóm tắt dưới dạng: ${style}.
+Chỉ trả về kết quả tóm tắt thuần túy. Không chào hỏi, không dẫn nhập, không giải thích, không hội thoại.
 
 --- NỘI DUNG CẦN TÓM TẮT ---
 ${text}
