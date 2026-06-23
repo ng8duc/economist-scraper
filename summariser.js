@@ -30,7 +30,6 @@ const ai = new GoogleGenAI({ apiKey });
 export async function summariseText(text, options = {}) {
   const model = options.model || process.env.GEMINI_MODEL;
   const language = options.language || "Tiếng Việt";
-  const style = options.style || "dạng danh sách gạch đầu dòng và một đoạn tóm tắt ngắn";
 
   if (!text || text.trim().length === 0) {
     throw new Error("Nội dung văn bản trống.");
@@ -38,8 +37,8 @@ export async function summariseText(text, options = {}) {
 
   const prompt = `
 Bạn là một biên tập viên chuyên nghiệp. Hãy cung cấp một bản tóm tắt chất lượng cao cho văn bản dưới đây.
-Bản tóm tắt phải được viết bằng ${language}.
-Định dạng bản tóm tắt dưới dạng: ${style}.
+Bản tóm tắt phải được viết bằng ${language}, đủ chi tiết để người đọc không cần phải đọc lại bản gốc.
+Định dạng bản tóm tắt dưới dạng danh sách các ý chính.
 Chỉ trả về kết quả tóm tắt thuần túy. Không chào hỏi, không dẫn nhập, không giải thích, không hội thoại.
 
 --- NỘI DUNG CẦN TÓM TẮT ---
