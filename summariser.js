@@ -2,6 +2,7 @@ import { GoogleGenAI } from "@google/genai";
 import { readFileSync, existsSync } from "node:fs";
 import { DatabaseSync } from "node:sqlite";
 import "dotenv/config";
+import { fileURLToPath } from "node:url";
 
 // Khởi tạo client Gemini
 // SDK sẽ tự động sử dụng biến môi trường GEMINI_API_KEY hoặc GOOGLE_API_KEY.
@@ -121,7 +122,7 @@ export async function summariseDatabase(dbPath = "articles.db") {
 }
 
 // Hỗ trợ chạy trực tiếp từ dòng lệnh (CLI)
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   const main = async () => {
     const dbPath = "articles.db";
     console.log(`Đang kiểm tra cơ sở dữ liệu: ${dbPath}...`);
