@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 
 // Khởi tạo client Gemini
 // SDK sẽ tự động sử dụng biến môi trường GEMINI_API_KEY hoặc GOOGLE_API_KEY.
-const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
+const apiKey = process.env.GEMINI_API_KEY;
 if (!apiKey || apiKey === "your_gemini_api_key_here") {
   console.error("Error: GEMINI_API_KEY chưa được thiết lập.");
   console.error("Vui lòng cập nhật API Key trong tệp .env:");
@@ -28,7 +28,7 @@ const ai = new GoogleGenAI({ apiKey });
  * @returns {Promise<string>} Kết quả tóm tắt từ Gemini
  */
 export async function summariseText(text, options = {}) {
-  const model = options.model || process.env.GEMINI_MODEL || "gemma-4-26b-a4b-it";
+  const model = options.model || process.env.GEMINI_MODEL;
   const language = options.language || "Tiếng Việt";
   const style = options.style || "dạng danh sách gạch đầu dòng và một đoạn tóm tắt ngắn";
 
@@ -37,7 +37,7 @@ export async function summariseText(text, options = {}) {
   }
 
   const prompt = `
-Bạn là một biên tập viên chuyên nghiệp. Hãy cung cấp một bản tóm tắt chất lượng cao, ngắn gọn cho văn bản dưới đây.
+Bạn là một biên tập viên chuyên nghiệp. Hãy cung cấp một bản tóm tắt chất lượng cao cho văn bản dưới đây.
 Bản tóm tắt phải được viết bằng ${language}.
 Định dạng bản tóm tắt dưới dạng: ${style}.
 Chỉ trả về kết quả tóm tắt thuần túy. Không chào hỏi, không dẫn nhập, không giải thích, không hội thoại.
@@ -86,7 +86,7 @@ export async function summariseDatabase(dbPath = "articles.db") {
     FROM articles
     WHERE content IS NOT NULL AND content != '' AND (summary IS NULL OR summary = '')
   `);
-  
+
   const articles = query.all();
 
   if (articles.length === 0) {
