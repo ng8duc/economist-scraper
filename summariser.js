@@ -81,6 +81,7 @@ ${text}
 
   try {
     const response = await ai.models.generateContent({
+      config: {temperature: 0.5},
       model: model,
       contents: prompt,
     });
