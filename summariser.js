@@ -19,6 +19,38 @@ if (!apiKey || apiKey === "your_gemini_api_key_here") {
 const ai = new GoogleGenAI({ apiKey });
 
 /**
+ * Chuẩn hóa khoảng cách giữa các gạch đầu dòng trong bản tóm tắt:
+ * - Cấp 1 cách nhau 2 dòng (2 newlines)
+ * - Cấp 2 và Cấp 1 (hoặc các ý phụ cấp 2) cách nhau 1 dòng (1 newline)
+ * 
+ * @param {string} text - Văn bản thô từ Gemini
+ * @returns {string} Văn bản đã được chuẩn hóa khoảng cách
+ */
+function normalizeSummarySpacing(text) {
+  if (!text) return text;
+  
+  // Tách dòng và lọc bỏ các dòng trống hoàn toàn
+  const lines = text.split('\n').map(line => line.trimEnd()).filter(line => line.trim() !== '');
+  if (lines.length === 0) return '';
+  
+  let result = lines[0];
+  for (let i = 1; i < lines.length; i++) {
+    const curr = lines[i];
+    
+    // Kiểm tra dòng hiện tại có phải bullet cấp 2 (thụt lề bằng khoảng trắng rồi đến * hoặc -)
+    const isCurrLevel2 = /^\s+[\*\-]\s+/.test(curr);
+    
+    if (isCurrLevel2) {
+      result += '\n' + curr;
+    } else {
+      result += '\n\n' + curr;
+    }
+  }
+  
+  return result;
+}
+
+/**
  * Tóm tắt văn bản được cung cấp sử dụng Gemini API.
  * 
  * @param {string} text - Đoạn văn bản cần tóm tắt
@@ -53,7 +85,7 @@ ${text}
       contents: prompt,
     });
 
-    return response.text;
+    return normalizeSummarySpacing(response.text);
   } catch (error) {
     throw new Error(`Lỗi Gemini API: ${error.message}`);
   }
