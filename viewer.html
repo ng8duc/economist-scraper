@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Economist – Article Viewer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary: #0f1117;
+      --bg-secondary: #161822;
+      --bg-tertiary: #1c1f2e;
+      --bg-hover: #252840;
+      --bg-active: #2a2d4a;
+      --border: #2a2d45;
+      --text-primary: #e8eaf0;
+      --text-secondary: #9ca3b8;
+      --text-muted: #6b7280;
+      --accent: #818cf8;
+      --accent-glow: rgba(129, 140, 248, 0.15);
+      --red-accent: #e74033;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 28px;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+    }
+
+    header .logo {
+      font-family: 'Lora', serif;
+      font-weight: 700;
+      font-size: 22px;
+      color: var(--text-primary);
+      letter-spacing: -0.5px;
+    }
+
+    header .logo span {
+      color: var(--red-accent);
+    }
+
+    header .subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-left: 4px;
+    }
+
+    header .article-count {
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Layout */
+    .container {
+      display: grid;
+      grid-template-columns: 220px 360px 1fr;
+      height: calc(100vh - 61px);
+    }
+
+    .panel {
+      overflow-y: auto;
+      border-right: 1px solid var(--border);
+      scrollbar-width: thin;
+      scrollbar-color: var(--bg-hover) transparent;
+    }
+
+    .panel:last-child { border-right: none; }
+
+    .panel-header {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      padding: 14px 20px;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+    }
+
+    /* Date list */
+    .date-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      cursor: pointer;
+      transition: background 0.15s, border-left 0.15s;
+      border-left: 3px solid transparent;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .date-item:hover { background: var(--bg-hover); }
+
+    .date-item.active {
+      background: var(--bg-active);
+      border-left-color: var(--accent);
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .date-item .badge {
+      font-size: 11px;
+      background: var(--bg-hover);
+      color: var(--text-muted);
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: 500;
+    }
+
+    .date-item.active .badge {
+      background: var(--accent-glow);
+      color: var(--accent);
+    }
+
+    /* Article list */
+    .article-item {
+      padding: 16px 20px;
+      cursor: pointer;
+      transition: background 0.15s;
+      border-bottom: 1px solid var(--border);
+      border-left: 3px solid transparent;
+    }
+
+    .article-item:hover { background: var(--bg-hover); }
+
+    .article-item.active {
+      background: var(--bg-active);
+      border-left-color: var(--accent);
+    }
+
+    .article-item .article-title {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.5;
+      color: var(--text-primary);
+    }
+
+    .article-item.active .article-title { color: var(--accent); }
+
+    .article-item .article-url {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Content panel */
+    .content-panel {
+      padding: 40px 52px;
+      overflow-y: auto;
+      background: var(--bg-primary);
+    }
+
+    .content-panel .content-title {
+      font-family: 'Lora', serif;
+      font-size: 28px;
+      font-weight: 600;
+      line-height: 1.35;
+      margin-bottom: 16px;
+      color: var(--text-primary);
+    }
+
+    .content-panel .content-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .content-panel .content-meta a {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 12px;
+    }
+
+    .content-panel .content-meta a:hover { text-decoration: underline; }
+
+    .content-panel .content-body {
+      font-size: 15px;
+      line-height: 1.85;
+      color: var(--text-secondary);
+      white-space: pre-wrap;
+    }
+
+    .content-panel .content-body strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    /* Placeholder states */
+    .placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: var(--text-muted);
+      font-size: 14px;
+      gap: 8px;
+    }
+
+    .placeholder .icon {
+      font-size: 36px;
+      opacity: 0.4;
+      margin-bottom: 4px;
+    }
+
+    /* Scrollbar */
+    .panel::-webkit-scrollbar, .content-panel::-webkit-scrollbar { width: 6px; }
+    .panel::-webkit-scrollbar-track, .content-panel::-webkit-scrollbar-track { background: transparent; }
+    .panel::-webkit-scrollbar-thumb, .content-panel::-webkit-scrollbar-thumb { background: var(--bg-hover); border-radius: 3px; }
+
+    /* Fade-in animation */
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-in { animation: fadeIn 0.25s ease-out; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo"><span>The Economist</span> Reader</div>
+    <div class="subtitle">Summarised Articles</div>
+    <div class="article-count" id="articleCount"></div>
+  </header>
+
+  <div class="container">
+    <!-- Column 1: Dates -->
+    <div class="panel" id="datePanel">
+      <div class="panel-header">Ngày xuất bản</div>
+      <div id="dateList"></div>
+    </div>
+
+    <!-- Column 2: Articles -->
+    <div class="panel" id="articlePanel">
+      <div class="panel-header" id="articlePanelHeader">Bài viết</div>
+      <div id="articleList">
+        <div class="placeholder">
+          <div class="icon">📅</div>
+          <div>Chọn một ngày để xem bài viết</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Column 3: Content -->
+    <div class="content-panel" id="contentPanel">
+      <div class="placeholder">
+        <div class="icon">📰</div>
+        <div>Chọn một bài viết để đọc tóm tắt</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let articles = [];
+    let groupedByDate = {};
+
+    async function init() {
+      const res = await fetch('articles.json');
+      articles = await res.json();
+      document.getElementById('articleCount').textContent = `${articles.length} bài viết`;
+
+      // Group by date
+      groupedByDate = {};
+      for (const a of articles) {
+        const d = a.date || 'Không rõ';
+        if (!groupedByDate[d]) groupedByDate[d] = [];
+        groupedByDate[d].push(a);
+      }
+
+      // Sort dates descending
+      const dates = Object.keys(groupedByDate).sort((a, b) => b.localeCompare(a));
+
+      const dateList = document.getElementById('dateList');
+      dateList.innerHTML = '';
+      for (const date of dates) {
+        const el = document.createElement('div');
+        el.className = 'date-item';
+        // Format date nicely: YYYY/MM/DD -> DD/MM/YYYY
+        const parts = date.split('/');
+        const display = parts.length === 3 ? `${parts[2]}/${parts[1]}/${parts[0]}` : date;
+        el.innerHTML = `
+          <span>${display}</span>
+          <span class="badge">${groupedByDate[date].length}</span>
+        `;
+        el.addEventListener('click', () => selectDate(date, el));
+        dateList.appendChild(el);
+      }
+    }
+
+    function selectDate(date, el) {
+      // Update active state
+      document.querySelectorAll('.date-item').forEach(d => d.classList.remove('active'));
+      el.classList.add('active');
+
+      const items = groupedByDate[date];
+      const parts = date.split('/');
+      const display = parts.length === 3 ? `${parts[2]}/${parts[1]}/${parts[0]}` : date;
+      document.getElementById('articlePanelHeader').textContent = `Bài viết – ${display}`;
+
+      const list = document.getElementById('articleList');
+      list.innerHTML = '';
+      list.className = 'fade-in';
+
+      for (const article of items) {
+        const el = document.createElement('div');
+        el.className = 'article-item';
+        // Extract topic from URL
+        const urlParts = article.url.replace('https://www.economist.com/', '').split('/');
+        const topic = urlParts[0] || '';
+        el.innerHTML = `
+          <div class="article-title">${article.title || 'Untitled'}</div>
+          <div class="article-url">${topic}</div>
+        `;
+        el.addEventListener('click', () => selectArticle(article, el));
+        list.appendChild(el);
+      }
+
+      // Reset content panel
+      document.getElementById('contentPanel').innerHTML = `
+        <div class="placeholder">
+          <div class="icon">📰</div>
+          <div>Chọn một bài viết để đọc tóm tắt</div>
+        </div>
+      `;
+    }
+
+    function selectArticle(article, el) {
+      document.querySelectorAll('.article-item').forEach(a => a.classList.remove('active'));
+      el.classList.add('active');
+
+      const panel = document.getElementById('contentPanel');
+      const parts = (article.date || '').split('/');
+      const display = parts.length === 3 ? `${parts[2]}/${parts[1]}/${parts[0]}` : (article.date || '');
+
+      // Process summary: convert markdown-style bold **text** to <strong>
+      let body = (article.summary || 'Chưa có tóm tắt.');
+      body = body.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      // Convert bullet points: lines starting with * or - to styled items
+      body = body.replace(/^[\*\-]\s+/gm, '● ');
+
+      panel.innerHTML = `
+        <div class="fade-in">
+          <div class="content-title">${article.title || 'Untitled'}</div>
+          <div class="content-meta">
+            <span>📅 ${display}</span>
+            <a href="${article.url}" target="_blank" rel="noopener">Đọc bản gốc ↗</a>
+          </div>
+          <div class="content-body">${body}</div>
+        </div>
+      `;
+    }
+
+    init();
+  </script>
+</body>
+</html>
