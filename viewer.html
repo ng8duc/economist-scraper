@@ -277,13 +277,13 @@
     </div>
   </div>
 
+  <script src="data.js"></script>
   <script>
     let articles = [];
     let groupedByDate = {};
 
     async function init() {
-      const res = await fetch('articles.json');
-      articles = await res.json();
+      articles = ARTICLES_DATA;
       document.getElementById('articleCount').textContent = `${articles.length} bài viết`;
 
       // Group by date
@@ -343,7 +343,8 @@
       }
 
       // Reset content panel
-      document.getElementById('contentPanel').innerHTML = `
+      const contentPanel = document.getElementById('contentPanel');
+      contentPanel.innerHTML = `
         <div class="placeholder">
           <div class="icon">📰</div>
           <div>Chọn một bài viết để đọc tóm tắt</div>

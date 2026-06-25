@@ -3,6 +3,7 @@ import { readFileSync, existsSync } from "node:fs";
 import { DatabaseSync } from "node:sqlite";
 import "dotenv/config";
 import { fileURLToPath } from "node:url";
+import { exportData } from "./export-data.js";
 
 // Khởi tạo client Gemini
 // SDK sẽ tự động sử dụng biến môi trường GEMINI_API_KEY hoặc GOOGLE_API_KEY.
@@ -135,6 +136,9 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
     try {
       await summariseDatabase(dbPath);
       console.log("\nHoàn thành quá trình tóm tắt cơ sở dữ liệu.");
+      
+      console.log("Đang tự động xuất dữ liệu mới ra file data.js...");
+      exportData(dbPath, "data.js");
     } catch (error) {
       console.error("\nLỗi hệ thống trong quá trình tóm tắt:", error.message);
       process.exit(1);

@@ -1,4 +1,5 @@
-[
+// Dữ liệu được tạo tự động từ articles.db. Không sửa trực tiếp file này.
+const ARTICLES_DATA = [
   {
     "url": "https://www.economist.com/business/2026/06/24/strange-new-ev-makers-keep-appearing-in-china",
     "title": "Strange new EV-makers keep appearing in China",
@@ -263,4 +264,4 @@
     "date": "2026/06/03",
     "summary": "* **Sự cố nổ tên lửa tại Cape Canaveral:** Vào ngày 28/5, tên lửa New Glenn của Blue Origin (công ty thuộc sở hữu của Jeff Bezos) đã phát nổ trong quá trình thử nghiệm tại Florida. Vụ nổ gây thiệt hại nặng nề cho cơ sở hạ tầng, bao gồm việc phá hủy bệ phóng duy nhất đang hoạt động của công ty, xe vận chuyển tên lửa (transporter-erector) và tháp chống sét. May mắn là không có thương vong về người.\n\n* **Tác động đối với Blue Origin:** Đây là một bước lùi nghiêm trọng đối với công ty sau nhiều năm phát triển chậm chạp. Khác với SpaceX có nhiều bệ phóng để duy trì hoạt động khi gặp sự cố, Blue Origin chỉ có một bệ phóng duy nhất, khiến việc phục hồi trở nên khó khăn hơn. Mục tiêu hiện tại của công ty là có thể bay trở lại vào cuối năm nay.\n\n* **Hệ lụy đối với dự án vệ tinh của Amazon:** Amazon đang đẩy mạnh dự án mạng lưới internet vệ tinh Leo nhằm cạnh tranh với Starlink của Elon Musk. Amazon đã đặt hàng tới 83 vụ phóng, trong đó có 27 vụ với Blue Origin. Vụ nổ này sẽ làm chậm tiến độ triển khai hơn 3.000 vệ tinh của Amazon, vốn đã đang gặp khó khăn trong việc đáp ứng các thời hạn cấp phép.\n\n* **Rủi ro dây chuyền đối với các tên lửa khác:** Nếu nguyên nhân vụ nổ được xác định là do lỗi động cơ, các tên lửa Vulcan Centaur của United Launch Alliance cũng có thể bị đình chỉ hoạt động, do loại tên lửa này sử dụng động cơ BE-4 do chính Blue Origin sản xuất.\n\n* **Đe dọa kế hoạch lên Mặt Trăng của NASA:** NASA đang trong cuộc đua với Trung Quốc để thiết lập căn cứ thường trực trên Mặt Trăng và đã thuê Blue Origin xây dựng tàu đổ bộ vận chuyển hàng hóa. Vụ nổ này khiến tham vọng đưa con người trở lại bề mặt Mặt Trăng vào đầu năm 2028 của NASA trở nên khó khăn hơn, đặc biệt khi nhiệm vụ đầu tiên của Blue Origin dự kiến diễn ra ngay trong mùa thu này đã bị đình trệ."
   }
-]
+];
