@@ -1,4 +1,4 @@
-# Thiết lập UTF-8 cho Console Output để hiển thị tiếng Việt và emoji đúng cách
+﻿# Thiết lập UTF-8 cho Console Output để hiển thị tiếng Việt và emoji đúng cách
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
 # Thiết lập để dừng script nếu xảy ra lỗi
