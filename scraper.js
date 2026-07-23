@@ -9,6 +9,25 @@ const TOPICS = [
   "https://www.economist.com/topics/science-and-technology"
 ];
 
+let isCheckingCookies = false;
+
+async function acceptCookiesIfPresent(page) {
+  if (isCheckingCookies) return;
+  isCheckingCookies = true;
+  try {
+    const cookieIframe = page.frameLocator('iframe[id^="sp_message_iframe"]');
+    const acceptButton = cookieIframe.getByRole('button', { name: 'Accept all', exact: true });
+    await acceptButton.waitFor({ state: "visible", timeout: 3000 });
+    console.log("Cookie consent popup detected. Clicking 'Accept all'...");
+    await acceptButton.click();
+    await page.waitForTimeout(1000);
+  } catch (e) {
+    // Cookie popup didn't appear or already accepted
+  } finally {
+    isCheckingCookies = false;
+  }
+}
+
 // Helper function to scrape a single topic
 async function scrapeTopic(page, db, topicUrl) {
   const topicName = topicUrl.split("/").pop();
@@ -23,17 +42,7 @@ async function scrapeTopic(page, db, topicUrl) {
   await page.goto(topicUrl, { waitUntil: "domcontentloaded" });
   console.log(`Opened ${topicUrl}`);
 
-  // Handle cookie popup if it appears
-  try {
-    const cookieIframe = page.frameLocator('iframe[id^="sp_message_iframe"]');
-    const acceptButton = cookieIframe.getByRole('button', { name: 'Accept all', exact: true });
-    await acceptButton.waitFor({ state: "visible", timeout: 5000 });
-    console.log("Cookie consent popup detected. Clicking 'Accept all'...");
-    await acceptButton.click();
-    await page.waitForTimeout(1000);
-  } catch (e) {
-    // Cookie popup didn't appear or already accepted in this session
-  }
+
 
   // Extract article links matching prefix
   let links = [];
@@ -198,6 +207,10 @@ async function main() {
   });
 
   const page = context.pages()[0] || (await context.newPage());
+
+  page.on("load", () => {
+    acceptCookiesIfPresent(page).catch(() => {});
+  });
 
   // Scrape each topic sequentially
   for (const topicUrl of TOPICS) {
