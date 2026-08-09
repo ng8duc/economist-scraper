@@ -20,17 +20,15 @@ function main() {
   const targetDate = `${yyyy}/${mm}/${dd}`;
 
   const db = new DatabaseSync(DB_FILE);
-  
-  // Query all articles matching the date condition
-  const query = db.prepare(`
-    SELECT url, title, date, content
-    FROM articles
-    WHERE date >= ?
-    ORDER BY date DESC
+
+  // Delete all articles older than the target date
+  const deleteStmt = db.prepare(`
+    DELETE FROM articles
+    WHERE date < ?
   `);
 
-  const articles = query.all(targetDate);
-  return articles;
+  const result = deleteStmt.run(targetDate);
+  console.log(`Đã xóa ${result.changes} bài viết cũ hơn ${targetDate}.`);
 }
 
 main();
